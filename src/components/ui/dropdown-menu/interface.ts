@@ -6,4 +6,5 @@ export interface IDropDownMenu {
     label: string;
     value: string;
   }>;
+  onChange?: (details: { label: string; value: string }) => void;
 }

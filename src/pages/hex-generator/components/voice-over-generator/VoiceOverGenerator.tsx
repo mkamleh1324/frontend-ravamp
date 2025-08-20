@@ -1,13 +1,13 @@
 import { Box, VStack, Heading, Textarea, Text } from "@chakra-ui/react";
 
-const VoiceOverGenerator = () => {
+const VoiceOverGenerator = ({ voiceover }: { voiceover: string }) => {
   return (
     <Box flexGrow={1}>
       <VStack align="start" gap={3}>
         <Heading size="sm">🎙 Voice Over Script</Heading>
         <Textarea
           placeholder="Type your script here..."
-          value={"hiiiii"}
+          value={voiceover}
           onChange={() => {}}
           maxLength={5000}
           resize="vertical"

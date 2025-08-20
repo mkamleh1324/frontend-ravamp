@@ -1,9 +1,23 @@
 import { Select, Portal } from "@chakra-ui/react";
 import { IDropDownMenu } from "./interface";
 
-const DropDownMenu = ({ title, items }: IDropDownMenu) => {
+const DropDownMenu = ({ title, items, onChange }: IDropDownMenu) => {
+  const defaultItem = items.items[0];
+
+  const onValueChange = (details: any) => {
+    onChange?.({
+      value: details.items[0].value,
+      label: details.items[0].label,
+    });
+  };
   return (
-    <Select.Root collection={items} size="sm" width="100px">
+    <Select.Root
+      collection={items}
+      size="sm"
+      width="100px"
+      onValueChange={onValueChange}
+      defaultValue={[defaultItem?.value]}
+    >
       <Select.HiddenSelect />
       <Select.Label>{title}</Select.Label>
       <Select.Control>

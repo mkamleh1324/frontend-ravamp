@@ -8,14 +8,18 @@ import queryClient from "./config/reactQuery";
 
 import "./App.scss";
 import { Toaster } from "./components/ui/toaster/toaster";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ChakraProvider value={defaultSystem}>
-      <Toaster />
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={routes} />
-      </QueryClientProvider>
-    </ChakraProvider>
+    <Provider store={store}>
+      <ChakraProvider value={defaultSystem}>
+        <Toaster />
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={routes} />
+        </QueryClientProvider>
+      </ChakraProvider>
+    </Provider>
   </StrictMode>
 );

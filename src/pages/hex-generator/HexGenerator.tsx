@@ -1,7 +1,7 @@
 import { Box, Heading } from "@chakra-ui/react";
 
-import ScriptGenerator from "./components/script-generator/ScriptGenerator";
 import Scenes from "./components/scenes/Scenes";
+import SceneGenerator from "./components/scene-generator/SceneGenerator";
 
 const HexGenerator = () => {
   return (
@@ -10,7 +10,7 @@ const HexGenerator = () => {
         AI Video Generation Platform
       </Heading>
 
-      <ScriptGenerator />
+      <SceneGenerator />
       <Scenes />
     </Box>
   );

@@ -1,3 +1,4 @@
+import { TImageModel, TTextModel } from "@/types/models";
 import { IGetAllRequest } from "../interface";
 
 export interface IProduct {
@@ -14,3 +15,30 @@ export interface IGetProductById {
 }
 
 export interface IGetAllProductsRequest extends IGetAllRequest {}
+
+export interface IGetScenes {
+  textModel: string;
+  imageModel: string;
+  imagesPerScene: number;
+  prompt: string;
+}
+
+export interface IGetImages {
+  imageModel: string;
+  imagesPerScene: number;
+  prompt: string;
+}
+
+export interface IGetVideo {
+  imageLink: string;
+  videoModel: string;
+  prompt: string;
+}
+
+export interface IGetVideoResponse {
+  videoLink: string;
+}
+
+export interface IGetImagesResponse {
+  images: string[];
+}

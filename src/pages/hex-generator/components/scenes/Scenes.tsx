@@ -9,13 +9,12 @@ import {
 import ImageGenerator from "../image-generator/ImageGenerator";
 import VideoGenerator from "../video-generator/VideoGenerator";
 import VoiceOverGenerator from "../voice-over-generator/VoiceOverGenerator";
+import { useSelector } from "react-redux";
+import { selectState } from "@/redux/HexGeneratorSlice";
 
 const Scenes = () => {
-  const scenes = [
-    { id: 1, status: "complete" },
-    { id: 2, status: "processing" },
-    { id: 3, status: "pending" },
-  ];
+  const { scenes } = useSelector(selectState);
+
   return (
     <Box>
       <Heading size="sm" mb={4} bg={"white"} p={10} borderRadius={10}>
@@ -30,7 +29,7 @@ const Scenes = () => {
             bg={"white"}
             paddingRight={10}
           >
-            <Accordion.Item key={index} value={item.status} h={"fit-content"}>
+            <Accordion.Item key={index} value={item.scene} h={"fit-content"}>
               <Accordion.ItemTrigger>
                 <Span flex="1" padding={10}>
                   Scene {index + 1}
@@ -41,9 +40,16 @@ const Scenes = () => {
                 <Separator />
 
                 <Flex gap="4" w={"100%"} padding={10}>
-                  <VoiceOverGenerator />
-                  <ImageGenerator />
-                  <VideoGenerator />
+                  <VoiceOverGenerator voiceover={item.dialog} />
+                  <ImageGenerator
+                    images={item.images}
+                    initialImagePrompt={item.imagePrompt}
+                    sceneIndex={index}
+                  />
+                  <VideoGenerator
+                    initialAnimationPrompt={item.animationPrompt}
+                    sceneIndex={index}
+                  />
                 </Flex>
               </Accordion.ItemContent>
             </Accordion.Item>
