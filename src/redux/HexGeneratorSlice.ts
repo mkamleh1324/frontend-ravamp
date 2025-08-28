@@ -148,6 +148,18 @@ const generatorSlice = createSlice({
       .addCase(fetchImages.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || "Failed to fetch data";
+      })
+      .addCase(fetchVideo.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchVideo.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.scenes = action.payload;
+      })
+      .addCase(fetchVideo.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error.message || "Failed to fetch data";
       });
   },
 });

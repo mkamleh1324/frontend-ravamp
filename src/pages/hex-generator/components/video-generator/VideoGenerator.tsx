@@ -19,9 +19,11 @@ import { fetchVideo } from "@/redux/HexGeneratorSlice";
 const VideoGenerator = ({
   initialAnimationPrompt,
   sceneIndex,
+  videoLink,
 }: {
   initialAnimationPrompt: string;
   sceneIndex: number;
+  videoLink?: string;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -75,9 +77,15 @@ const VideoGenerator = ({
         </Text>
 
         <Text fontWeight="bold">Generated Video</Text>
-        <AspectRatio ratio={16 / 9} h={200} w={200}>
-          <video width={500} height={500} controls poster={images[0]}>
-            <source src={mockVideo} type="video/mp4" />
+        <AspectRatio ratio={16 / 9} w="100%">
+          <video
+            key={videoLink}
+            controls
+            poster={images?.[0]}
+            autoPlay
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          >
+            <source src={videoLink} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </AspectRatio>

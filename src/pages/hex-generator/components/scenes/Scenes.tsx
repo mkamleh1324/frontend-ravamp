@@ -49,6 +49,7 @@ const Scenes = () => {
                   <VideoGenerator
                     initialAnimationPrompt={item.animationPrompt}
                     sceneIndex={index}
+                    videoLink={item.videoLink}
                   />
                 </Flex>
               </Accordion.ItemContent>
