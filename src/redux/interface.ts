@@ -9,6 +9,8 @@ export interface IScene {
   dialog: string;
   images: string[];
   selectedImage?: number;
+  isImageLoading?: boolean;
+  isVideoLoading?: boolean;
   videoLink?: string;
 }
 

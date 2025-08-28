@@ -6,9 +6,9 @@ import {
   AspectRatio,
   Button,
   Text,
+  Spinner,
 } from "@chakra-ui/react";
 //@ts-ignore
-import mockVideo from "/src/assets/videos/mock.mp4";
 import DropDownMenu from "@/components/ui/dropdown-menu/DropDownMenu";
 import { animationModels } from "./constants";
 import { ChangeEvent, useState } from "react";
@@ -20,10 +20,12 @@ const VideoGenerator = ({
   initialAnimationPrompt,
   sceneIndex,
   videoLink,
+  isLoading,
 }: {
   initialAnimationPrompt: string;
   sceneIndex: number;
   videoLink?: string;
+  isLoading: boolean;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -96,7 +98,12 @@ const VideoGenerator = ({
           onChange={handleVideoModelChange}
         />
 
-        <Button variant="outline" onClick={handleRegenerateVideo}>
+        <Button
+          disabled={isLoading}
+          variant="outline"
+          onClick={handleRegenerateVideo}
+        >
+          {isLoading && <Spinner size="lg" color="blue.500" />}
           Regenerate Video
         </Button>
       </VStack>

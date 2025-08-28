@@ -5,6 +5,7 @@ import {
   Span,
   Separator,
   Flex,
+  Spinner,
 } from "@chakra-ui/react";
 import ImageGenerator from "../image-generator/ImageGenerator";
 import VideoGenerator from "../video-generator/VideoGenerator";
@@ -13,10 +14,27 @@ import { useSelector } from "react-redux";
 import { selectState } from "@/redux/HexGeneratorSlice";
 
 const Scenes = () => {
-  const { scenes } = useSelector(selectState);
+  const { scenes, isLoading } = useSelector(selectState);
 
   return (
     <Box>
+      {isLoading && (
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          bg="rgba(255, 255, 255, 0.8)"
+          zIndex={999}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Spinner size="xl" color="blue.500" />
+        </Box>
+      )}
+
       <Heading size="sm" mb={4} bg={"white"} p={10} borderRadius={10}>
         Generated Scenes ({scenes.length} scenes detected)
       </Heading>
@@ -45,11 +63,13 @@ const Scenes = () => {
                     images={item.images}
                     initialImagePrompt={item.imagePrompt}
                     sceneIndex={index}
+                    isLoading={!!item.isImageLoading}
                   />
                   <VideoGenerator
                     initialAnimationPrompt={item.animationPrompt}
                     sceneIndex={index}
                     videoLink={item.videoLink}
+                    isLoading={!!item.isVideoLoading}
                   />
                 </Flex>
               </Accordion.ItemContent>

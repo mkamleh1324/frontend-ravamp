@@ -13,6 +13,7 @@ import {
   Button,
   Text,
   Image,
+  Spinner,
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -21,10 +22,12 @@ const ImageGenerator = ({
   images,
   initialImagePrompt,
   sceneIndex,
+  isLoading,
 }: {
   images: string[];
   initialImagePrompt: string;
   sceneIndex: number;
+  isLoading: boolean;
 }) => {
   const [imagePrompt, setImagePrompt] = useState(initialImagePrompt);
 
@@ -106,7 +109,12 @@ const ImageGenerator = ({
           </HStack>
         </RadioCard.Root>
 
-        <Button variant="outline" onClick={regenerateImage}>
+        <Button
+          variant="outline"
+          onClick={regenerateImage}
+          disabled={isLoading}
+        >
+          {isLoading && <Spinner size="lg" color="blue.500" />}
           Recreate Images
         </Button>
       </VStack>

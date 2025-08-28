@@ -7,7 +7,6 @@ import {
   IGetVideoResponse,
 } from "./interface";
 import { IScene } from "@/redux/interface";
-import { generateScenesMock } from "./mocks";
 
 export const scenesGenerator = async ({
   textModel,
@@ -15,15 +14,13 @@ export const scenesGenerator = async ({
   imagesPerScene,
   prompt,
 }: IGetScenes): Promise<IScene[]> => {
-  //   const scenes = await request<IScene[]>({
-  //     method: "POST",
-  //     body: { textModel, imagesPerScene, imageModel, prompt },
-  //     url: "text/",
-  //   });
+  const scenes = await request<IScene[]>({
+    method: "POST",
+    body: { textModel, imagesPerScene, imageModel, prompt },
+    url: "scenes/",
+  });
 
-  return Promise.resolve(generateScenesMock);
-
-  //   return scenes;
+  return scenes;
 };
 
 export const imageGenerator = async ({

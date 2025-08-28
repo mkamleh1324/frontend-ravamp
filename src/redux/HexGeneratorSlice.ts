@@ -32,42 +32,27 @@ export const fetchScenes = createAsyncThunk<IFetchScenes, IGetScenes>(
   }
 );
 
-export const fetchImages = createAsyncThunk<IScene[], IFetchImagesThunk>(
+export const fetchImages = createAsyncThunk<string[], IFetchImagesThunk>(
   "images/fetch",
-  async ({ prompt, sceneIndex }, thunkAPI) => {
+  async ({ prompt }, thunkAPI) => {
     const state: RootState = thunkAPI.getState() as RootState;
 
-    const {
-      scenes: existingScenes,
-      imagesPerScene,
-      imageModel,
-    } = state.generator;
+    const { imagesPerScene, imageModel } = state.generator;
     try {
-      const response = await imageGenerator({
+      const images = await imageGenerator({
         imagesPerScene,
         imageModel,
         prompt,
       });
 
-      const updatedScenes = existingScenes.map((scene, index) => {
-        if (index === sceneIndex) {
-          return {
-            ...scene,
-            images: response,
-            imagePrompt: prompt,
-          };
-        }
-        return scene;
-      });
-
-      return updatedScenes;
+      return images;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message || "Unknown error");
     }
   }
 );
 
-export const fetchVideo = createAsyncThunk<IScene[], IFetchVideoThunk>(
+export const fetchVideo = createAsyncThunk<string, IFetchVideoThunk>(
   "video/fetch",
   async ({ prompt, sceneIndex, videoModel }, thunkAPI) => {
     const state: RootState = thunkAPI.getState() as RootState;
@@ -76,24 +61,13 @@ export const fetchVideo = createAsyncThunk<IScene[], IFetchVideoThunk>(
     const selectedImageIndex = selectedImagesPerScene[sceneIndex] ?? 0;
     const imageLink = existingScenes[sceneIndex].images[selectedImageIndex];
     try {
-      const response = await videoGenerator({
+      const videoLink = await videoGenerator({
         imageLink,
         videoModel,
         prompt,
       });
 
-      const updatedScenes = existingScenes.map((scene, index) => {
-        if (index === sceneIndex) {
-          return {
-            ...scene,
-            videoLink: response,
-            imagePrompt: prompt,
-          };
-        }
-        return scene;
-      });
-
-      return updatedScenes;
+      return videoLink;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.message || "Unknown error");
     }
@@ -120,6 +94,12 @@ const generatorSlice = createSlice({
       const { sceneIndex, selectedIndex } = action.payload;
       state.selectedImagesPerScene[sceneIndex] = selectedIndex;
     },
+    setVideoIsLoading: (state, action) => {
+      state.scenes[action.payload].isVideoLoading = true;
+    },
+    setImageIsLoading: (state, action) => {
+      state.scenes[action.payload].isVideoLoading = true;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -137,28 +117,35 @@ const generatorSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message || "Failed to fetch data";
       })
-      .addCase(fetchImages.pending, (state) => {
-        state.isLoading = true;
+      .addCase(fetchImages.pending, (state, action) => {
+        const { sceneIndex } = action.meta.arg;
         state.error = null;
+        state.scenes[sceneIndex].isImageLoading = true;
       })
       .addCase(fetchImages.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.scenes = action.payload;
+        const { sceneIndex } = action.meta.arg;
+        state.scenes[sceneIndex].images = action.payload;
+        state.scenes[sceneIndex].isImageLoading = false;
       })
       .addCase(fetchImages.rejected, (state, action) => {
-        state.isLoading = false;
+        const { sceneIndex } = action.meta.arg;
+        state.scenes[sceneIndex].isImageLoading = false;
         state.error = action.error.message || "Failed to fetch data";
       })
-      .addCase(fetchVideo.pending, (state) => {
-        state.isLoading = true;
+      .addCase(fetchVideo.pending, (state, action) => {
+        const { sceneIndex } = action.meta.arg;
         state.error = null;
+        state.scenes[sceneIndex].isVideoLoading = true;
       })
       .addCase(fetchVideo.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.scenes = action.payload;
+        const { sceneIndex } = action.meta.arg;
+        state.scenes[sceneIndex].videoLink = action.payload;
+        state.scenes[sceneIndex].isVideoLoading = false;
       })
       .addCase(fetchVideo.rejected, (state, action) => {
-        state.isLoading = false;
+        const { sceneIndex } = action.meta.arg;
+        state.scenes[sceneIndex].isVideoLoading = false;
+
         state.error = action.error.message || "Failed to fetch data";
       });
   },
